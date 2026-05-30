@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>BBIT Pro — Critical Thinking &amp; Druid Loops</title>
+<style>
+  :root{
+    --bg:#000; --ink:#f5f5f7; --muted:#86868b; --dim:#a1a1a6; --hair:rgba(255,255,255,.12); --hair2:rgba(255,255,255,.07);
+    --grad:linear-gradient(118deg,#FFD79A 0%,#FF9F6B 32%,#FF6F94 64%,#C28BFF 100%);
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font); letter-spacing:-.012em;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden; min-height:100vh}
+  a{text-decoration:none; color:inherit}
+  ::selection{background:rgba(255,143,107,.32)}
+  .nav{position:sticky; top:0; z-index:70; height:54px; display:flex; align-items:center; padding:0 22px;
+    background:rgba(0,0,0,.62); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--hair2); font-size:13.5px; font-weight:600}
+  .nav .acc{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; margin-left:5px}
+
+  .hero{position:relative; min-height:80vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:96px 22px 56px; overflow:hidden}
+  .hero::before{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+     radial-gradient(58% 46% at 50% 8%, rgba(255,159,107,.18), transparent 60%),
+     radial-gradient(46% 40% at 14% 82%, rgba(194,139,255,.15), transparent 60%),
+     radial-gradient(46% 40% at 88% 80%, rgba(255,111,148,.13), transparent 62%)}
+  .hero>*{position:relative; z-index:1}
+  .eyebrow{font-size:clamp(15px,2.2vw,21px); font-weight:600; margin-bottom:10px;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .hero h1{font-size:clamp(46px,9.5vw,104px); font-weight:700; line-height:1; letter-spacing:-.035em; margin:0 0 22px;
+    max-width:13ch; text-wrap:balance; color:#fafafc}
+  .hero p{font-size:clamp(18px,2.6vw,26px); color:var(--dim); font-weight:400; max-width:32ch; margin:0 auto; line-height:1.4}
+
+  .cards{max-width:1040px; margin:0 auto; padding:10px 22px 100px; display:grid; grid-template-columns:1fr 1fr; gap:22px}
+  @media(max-width:720px){.cards{grid-template-columns:1fr; padding-bottom:70px}}
+  .card{position:relative; display:flex; flex-direction:column; padding:40px 34px 34px; border-radius:30px;
+    background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.015)); border:1px solid var(--hair);
+    min-height:340px; overflow:hidden; transition:transform .45s var(--ease), border-color .45s; opacity:0; transform:translateY(34px)}
+  .card.in{opacity:1; transform:none}
+  .card:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.26)}
+  .card::after{content:""; position:absolute; width:320px; height:320px; right:-120px; top:-120px; border-radius:50%;
+    background:radial-gradient(circle,rgba(255,159,107,.18),transparent 70%); opacity:0; transition:opacity .5s}
+  .card:hover::after{opacity:1}
+  .card .ico{width:74px; height:74px; border-radius:20px; display:grid; place-items:center; font-size:38px; margin-bottom:auto;
+    background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.02)); border:1px solid var(--hair);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
+  .card h2{font-size:clamp(26px,3.4vw,34px); font-weight:700; letter-spacing:-.025em; margin:26px 0 8px}
+  .card p{margin:0 0 22px; color:var(--dim); font-size:16px; line-height:1.5}
+  .go{display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .go .arr{color:#FF8F6B; transition:transform .25s var(--ease)}
+  .card:hover .arr{transform:translateX(5px)}
+  .foot{border-top:1px solid var(--hair2); padding:34px 22px 64px; text-align:center; color:var(--muted); font-size:12.5px}
+  .foot a{color:var(--dim)}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important} .card{opacity:1; transform:none}}
+</style>
+</head>
+<body>
+<nav class="nav">BBIT<span class="acc">Pro</span></nav>
+
+<header class="hero">
+  <div class="eyebrow">Black Belt in Thinking</div>
+  <h1>Think clearly. Solve completely.</h1>
+  <p>Two interactive guides, reimagined. Cinematic, focused, and built to make the ideas stick.</p>
+</header>
+
+<main class="cards">
+  <a class="card" href="critical-thinking-apple.html">
+    <span class="ico">🧠</span>
+    <h2>Critical Thinking</h2>
+    <p>Cause &amp; effect, prerequisites, hidden assumptions, and a repeatable way to invent solutions — the logic toolkit, step by step.</p>
+    <span class="go">Explore the module <span class="arr">→</span></span>
+  </a>
+  <a class="card" href="druid-loops-apple.html">
+    <span class="ico">🔁</span>
+    <h2>Druid Loops</h2>
+    <p>Why some problems keep coming back — how to spot the cycle, map it, and break a single link to end it for good.</p>
+    <span class="go">Explore the module <span class="arr">→</span></span>
+  </a>
+</main>
+
+<footer class="foot">
+  BBIT Pro edition · Critical Thinking &amp; Recurring Problems. Your progress &amp; settings are saved on your device.<br>
+  <a href="index.html">Prefer the warm edition? →</a>
+</footer>
+
+<script>
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+  document.querySelectorAll('.card').forEach((c,i)=>{c.style.transitionDelay=(i*90)+'ms';io.observe(c)});
+</script>
+</body>
+</html>
