@@ -80,6 +80,7 @@ h1,h2,h3{text-wrap:balance}
 .set-row{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 4px}
 .set-row + .set-row{border-top:1px solid var(--hair2)}
 .set-row > span{font-size:14px; font-weight:600; color:var(--ink)}
+.set-row > span small{display:block; font-size:11.5px; font-weight:400; color:var(--muted); margin-top:2px}
 .seg{display:flex; background:rgba(255,255,255,.08); border:1px solid var(--hair2); border-radius:980px; padding:3px}
 .seg button{border:0; background:transparent; color:var(--dim); font:inherit; font-size:12.5px; font-weight:600;
   padding:7px 13px; border-radius:980px; cursor:pointer; transition:.2s; min-height:34px}
@@ -129,6 +130,10 @@ body.at-home .menu-toggle{display:none!important}
 .view{animation:viewIn .5s var(--ease) both}
 @keyframes viewIn{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
 .view:focus{outline:none}
+/* ---- skim mode: whole module on one scrollable page ---- */
+body.layout-all .view[data-chapter]{display:block!important; animation:none; border-top:1px solid var(--hair2)}
+body.layout-all #view-home, body.layout-all #view-done{display:none!important}
+body.layout-all .ch-nav, body.layout-all .depth-hint{display:none!important}
 
 /* ---- hero (home) ---- */
 .hero{position:relative; min-height:84vh; display:flex; flex-direction:column; align-items:center;
@@ -396,6 +401,8 @@ body.focus .chapter{max-width:660px}
       <button data-scale="up" aria-label="Bigger text">A+</button></div></div>
   <div class="set-row"><span>Easy-read font</span>
     <button class="easy-toggle" data-easy aria-pressed="false">Off</button></div>
+  <div class="set-row"><span>Skim mode<small>Whole module on one page — best for quick review</small></span>
+    <button class="easy-toggle" data-layout aria-pressed="false">Off</button></div>
 </div>
 
 <div class="shell">
@@ -627,6 +634,7 @@ document.querySelectorAll('.rail-dot,.home-tick').forEach(b=>b.onclick=e=>{e.pre
 /* ---- lazy images ---- */
 function loadImages(view){const v=document.getElementById('view-'+view); if(!v)return;
   v.querySelectorAll('img.lazy[data-src]').forEach(im=>{im.src=im.dataset.src;im.removeAttribute('data-src');im.classList.remove('lazy')});}
+function loadAllImages(){document.querySelectorAll('img.lazy[data-src]').forEach(im=>{im.src=im.dataset.src;im.removeAttribute('data-src');im.classList.remove('lazy')});}
 
 /* ---- stepper + crumb + rail active ---- */
 function updateStepper(view){
@@ -642,6 +650,18 @@ function updateRail(view){document.querySelectorAll('.rail-item').forEach(li=>li
 function go(view){
   if(!VIEWS.includes(view))view='home';
   current=view;
+  if(document.body.classList.contains('layout-all')){
+    updateRail(view); updateStepper(view); store.set('last',view);
+    const sr=document.getElementById('srStatus');
+    if(sr){const i=CHAPTERS.indexOf(view);
+      if(i>=0){const t=document.querySelector('#view-'+view+' h1');sr.textContent='Chapter '+(i+1)+' of '+M+(t?', '+t.textContent:'');}
+      else sr.textContent='Skim view';}
+    closeRail(); closeCmdk(); closeSettings();
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, beh=reduce?'auto':'smooth';
+    if(view==='home') window.scrollTo({top:0,behavior:beh});
+    else { const t=document.getElementById('view-'+view); if(t)t.scrollIntoView({behavior:beh,block:'start'}); }
+    return;
+  }
   document.body.classList.toggle('at-home', view==='home');
   views.forEach(v=>{const on=v.dataset.view===view; v.hidden=!on; v.classList.toggle('active',on);});
   loadImages(view); updateRail(view); updateStepper(view);
@@ -702,6 +722,18 @@ function applyFocus(on){document.body.classList.toggle('focus',on);if(focusBtn){
 applyFocus(store.get('focus',false));
 if(focusBtn)focusBtn.onclick=()=>{const on=!document.body.classList.contains('focus');applyFocus(on);store.set('focus',on)};
 
+/* ---- skim (all-on-one-page) layout ---- */
+function applyLayout(m){
+  const all=m==='all';
+  document.body.classList.toggle('layout-all',all);
+  const b=document.querySelector('[data-layout]');
+  if(b){b.classList.toggle('active',all);b.setAttribute('aria-pressed',all);b.textContent=all?'On':'Off';}
+  if(all){loadAllImages();views.forEach(v=>{const ch=v.hasAttribute('data-chapter');v.hidden=!ch;v.classList.toggle('active',ch);});}
+}
+applyLayout(store.get('layout','paged'));
+const lay=document.querySelector('[data-layout]');
+if(lay)lay.onclick=()=>{const all=!document.body.classList.contains('layout-all');applyLayout(all?'all':'paged');store.set('layout',all?'all':'paged');if(!all)go(current);else go(current);};
+
 /* ---- command palette ---- */
 const cmdk=document.getElementById('cmdk');
 const cmdkInput=cmdk?cmdk.querySelector('.cmdk-input'):null;
@@ -759,6 +791,13 @@ document.querySelector('.stage').addEventListener('keydown',e=>{
 lb.onclick=e=>{if(e.target===lb||e.target===lbi)closeLb()};
 lbc.onclick=closeLb;
 lb.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();lbc.focus()}});
+
+/* ---- scroll-spy (keeps rail/stepper synced in skim mode) ---- */
+const spy=new IntersectionObserver(es=>{
+  if(!document.body.classList.contains('layout-all'))return;
+  es.forEach(e=>{if(e.isIntersecting){const v=e.target.dataset.view;current=v;updateRail(v);updateStepper(v);}});
+},{rootMargin:'-45% 0px -45% 0px'});
+document.querySelectorAll('.view[data-chapter]').forEach(v=>spy.observe(v));
 
 /* ---- init ---- */
 refreshCount(); syncResume();
