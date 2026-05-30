@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BBIT — Critical Thinking &amp; Druid Loops</title>
+<style>
+  :root{
+    --bg:#F2E9DA; --bg2:#E8DCC6; --surface:#FBF5EA; --ink:#33291F; --muted:#6E5E4C;
+    --line:#D8C7A8; --accent:#9C4A1E; --accent2:#5E6B3B; --hero1:#5A3418; --hero2:#3E4A28;
+    --font-display:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --font-body:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--font-body); color:var(--ink); background:var(--bg);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:180px 180px; background-blend-mode:multiply;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:48px 20px; line-height:1.6;
+  }
+  .hero{text-align:center; max-width:760px; margin-bottom:40px}
+  .kicker{text-transform:uppercase; letter-spacing:.18em; font-size:13px; color:var(--accent); font-weight:700; margin-bottom:14px}
+  h1{font-family:var(--font-display); font-size:clamp(32px,6vw,52px); line-height:1.1; margin:0 0 16px;
+    background:linear-gradient(120deg,var(--hero1),var(--hero2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .sub{font-size:18px; color:var(--muted); margin:0 auto; max-width:560px}
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; width:100%; max-width:760px}
+  .card{
+    display:block; text-decoration:none; color:inherit; background:var(--surface);
+    border:1px solid var(--line); border-radius:18px 18px 22px 22px; padding:30px 28px;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 10px 28px -14px rgba(60,40,20,.45);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    position:relative; overflow:hidden;
+  }
+  .card::before{content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .card:hover,.card:focus-visible{transform:translateY(-4px);
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 18px 40px -16px rgba(60,40,20,.55);
+    border-color:var(--accent); outline:none}
+  .card .ico{font-size:40px; display:block; margin-bottom:14px}
+  .card h2{font-family:var(--font-display); font-size:24px; margin:0 0 8px; color:var(--ink)}
+  .card p{margin:0 0 16px; color:var(--muted); font-size:15px}
+  .go{display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--accent); font-size:15px}
+  .go .arr{transition:transform .18s ease}
+  .card:hover .arr,.card:focus-visible .arr{transform:translateX(4px)}
+  footer{margin-top:42px; color:var(--muted); font-size:13px; text-align:center}
+  footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="kicker">BBIT Learning Module</div>
+    <h1>Critical Thinking &amp; Druid Loops</h1>
+    <p class="sub">Two interactive, accessible study guides. Pick a module to begin — each one has Simple/Detailed modes, theme &amp; text-size controls, and a progress checklist.</p>
+  </div>
+  <div class="cards">
+    <a class="card" href="critical-thinking.html">
+      <span class="ico">🧠</span>
+      <h2>Critical Thinking</h2>
+      <p>Cause &amp; effect, prerequisites, hidden assumptions, injections and tactics — the logic toolkit, step by step.</p>
+      <span class="go">Open module <span class="arr">→</span></span>
+    </a>
+    <a class="card" href="druid-loops.html">
+      <span class="ico">🔁</span>
+      <h2>Druid Loops</h2>
+      <p>Why some problems keep coming back — how to spot the cycle, map it, and break a single link to fix it for good.</p>
+      <span class="go">Open module <span class="arr">→</span></span>
+    </a>
+  </div>
+  <footer>Best viewed in a modern browser. Pages work offline — all images are built in.</footer>
+</body>
+</html>
