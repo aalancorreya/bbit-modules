@@ -21,7 +21,7 @@
   --t-hero:clamp(42px,8vw,82px); --t1:clamp(28px,4.4vw,46px); --t2:clamp(26px,4vw,40px);
   --t3:clamp(20px,2.4vw,26px); --t4:clamp(17px,1.9vw,20px);
   --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-  --rail:268px; --readw:880px; --shellmax:1480px; --scale:1; --ease:cubic-bezier(.22,1,.36,1);
+  --rail:268px; --readw:940px; --shellmax:1600px; --scale:1; --ease:cubic-bezier(.22,1,.36,1);
   --nav-h:54px;
 }
 *{box-sizing:border-box}
@@ -92,6 +92,10 @@ h1,h2,h3{text-wrap:balance}
 
 /* ---- shell: rail + stage ---- */
 .shell{display:grid; grid-template-columns:var(--rail) minmax(0,1fr); max-width:var(--shellmax); margin-inline:auto}
+/* home = full-bleed landing: no sidebar, hero spans the whole viewport */
+body.at-home .shell{grid-template-columns:1fr; max-width:none}
+body.at-home .rail, body.at-home .rail-scrim{display:none}
+body.at-home .menu-toggle{display:none!important}
 .rail{position:sticky; top:var(--nav-h); align-self:start; height:calc(100vh - var(--nav-h));
   overflow:auto; overscroll-behavior:contain; border-right:1px solid var(--hair2); padding:22px 14px 40px}
 .rail-head{padding:0 8px 14px}
@@ -155,7 +159,7 @@ h1,h2,h3{text-wrap:balance}
   border:1px solid var(--hair); background:rgba(0,0,0,.35); backdrop-filter:blur(6px)}
 
 /* ---- home body: bento + chapter list ---- */
-.home-body{max-width:1040px; margin:0 auto; padding:var(--s7) 22px 110px}
+.home-body{max-width:1200px; margin:0 auto; padding:var(--s7) 22px 110px}
 .kicker{font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
   text-align:center; margin:var(--s6) 0 10px}
 .home-body .kicker:first-child{margin-top:0}
@@ -608,6 +612,7 @@ function updateRail(view){document.querySelectorAll('.rail-item').forEach(li=>li
 function go(view){
   if(!VIEWS.includes(view))view='home';
   current=view;
+  document.body.classList.toggle('at-home', view==='home');
   views.forEach(v=>{const on=v.dataset.view===view; v.hidden=!on; v.classList.toggle('active',on);});
   loadImages(view); updateRail(view); updateStepper(view);
   const sr=document.getElementById('srStatus');
