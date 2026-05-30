@@ -701,8 +701,21 @@ function applyLayout(m){
   if(all){loadAllImages();views.forEach(v=>{const ch=v.hasAttribute('data-chapter');v.hidden=!ch;v.classList.toggle('active',ch);});}
 }
 applyLayout(store.get('layout','paged'));
+/* which chapter sits at the top of the viewport right now (geometry, not the spy) */
+function chapterAtScroll(){
+  const mid=window.innerHeight*0.5; let best=CHAPTERS[0], bestTop=-Infinity;
+  for(const id of CHAPTERS){const el=document.getElementById('view-'+id); if(!el)continue;
+    const t=el.getBoundingClientRect().top;
+    if(t<=mid && t>bestTop){bestTop=t; best=id;}}
+  return best;
+}
 const lay=document.querySelector('[data-layout]');
-if(lay)lay.onclick=()=>{const all=!document.body.classList.contains('layout-all');applyLayout(all?'all':'paged');store.set('layout',all?'all':'paged');if(!all)go(current);else go(current);};
+if(lay)lay.onclick=()=>{
+  const turningOn=!document.body.classList.contains('layout-all');
+  if(turningOn){applyLayout('all');store.set('layout','all');go(current);}
+  else {const land=chapterAtScroll();applyLayout('paged');store.set('layout','paged');
+    if(location.hash.slice(1)===land)go(land);else location.hash=land;}
+};
 
 /* ---- command palette ---- */
 const cmdk=document.getElementById('cmdk');
@@ -762,10 +775,17 @@ lb.onclick=e=>{if(e.target===lb||e.target===lbi)closeLb()};
 lbc.onclick=closeLb;
 lb.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();lbc.focus()}});
 
-/* ---- scroll-spy (keeps rail/stepper synced in skim mode) ---- */
+/* ---- scroll-spy (keeps rail/stepper + hash synced in skim mode) ---- */
+function syncSkim(v){
+  current=v; updateRail(v); updateStepper(v);
+  if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);
+  store.set('last',v);
+  const sr=document.getElementById('srStatus'),i=CHAPTERS.indexOf(v);
+  if(sr&&i>=0){const t=document.querySelector('#view-'+v+' h1');sr.textContent='Chapter '+(i+1)+' of '+M+(t?', '+t.textContent:'');}
+}
 const spy=new IntersectionObserver(es=>{
   if(!document.body.classList.contains('layout-all'))return;
-  es.forEach(e=>{if(e.isIntersecting){const v=e.target.dataset.view;current=v;updateRail(v);updateStepper(v);}});
+  es.forEach(e=>{if(e.isIntersecting)syncSkim(e.target.dataset.view);});
 },{rootMargin:'-45% 0px -45% 0px'});
 document.querySelectorAll('.view[data-chapter]').forEach(v=>spy.observe(v));
 
