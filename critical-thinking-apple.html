@@ -608,7 +608,7 @@ function applyEasy(on){document.body.classList.toggle('easy-read',on);
 function applyScale(s){document.documentElement.style.setProperty('--scale',s);
   const el=document.getElementById('scaleVal');if(el)el.textContent=Math.round(s*100)+'%';}
 let scale=store.get('scale',1); applyScale(scale);
-applyMode(store.get('mode','simple')); applyEasy(store.get('easy',false));
+applyMode(store.get('mode','simple')); applyEasy(store.get('easy',true));
 document.querySelectorAll('[data-mode-btn]').forEach(b=>b.onclick=()=>{applyMode(b.dataset.modeBtn);store.set('mode',b.dataset.modeBtn)});
 const ez=document.querySelector('[data-easy]'); if(ez)ez.onclick=()=>{const on=!document.body.classList.contains('easy-read');applyEasy(on);store.set('easy',on)};
 const su=document.querySelector('[data-scale="up"]'),sd=document.querySelector('[data-scale="down"]');
@@ -730,7 +730,7 @@ function applyLayout(m){
   if(b){b.classList.toggle('active',all);b.setAttribute('aria-pressed',all);b.textContent=all?'On':'Off';}
   if(all){loadAllImages();views.forEach(v=>{const ch=v.hasAttribute('data-chapter');v.hidden=!ch;v.classList.toggle('active',ch);});}
 }
-applyLayout(store.get('layout','paged'));
+applyLayout(store.get('layout','all'));
 /* which chapter sits at the top of the viewport right now (geometry, not the spy) */
 function chapterAtScroll(){
   const mid=window.innerHeight*0.5; let best=CHAPTERS[0], bestTop=-Infinity;
