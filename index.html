@@ -4,61 +4,87 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BBIT — Critical Thinking &amp; Druid Loops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F2E9DA; --bg2:#E8DCC6; --surface:#FBF5EA; --ink:#33291F; --muted:#6E5E4C;
-    --line:#D8C7A8; --accent:#9C4A1E; --accent2:#5E6B3B; --hero1:#5A3418; --hero2:#3E4A28;
-    --font-display:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
-    --font-body:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    /* Walnut — matches the modules' dark theme */
+    --bg:#191510; --bg2:#241D16; --surface:#272019; --ink:#EFE4D2; --muted:#A8997F;
+    --line:#3A3026; --accent:#E0915A; --accent2:#A0B46E; --gold:#D8A24E;
+    --hero1:#3A2415; --hero2:#2A331C; --stage:#13100B;
+    --font-display:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;
+    --font-body:"Newsreader",Georgia,"Times New Roman",serif;
+    --font-ui:"Public Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    --ring:color-mix(in srgb,var(--accent) 55%,transparent);
+    --accentglow:color-mix(in srgb,var(--accent) 22%,transparent);
+    --shadow:0 14px 38px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.45);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
     font-family:var(--font-body); color:var(--ink); background:var(--bg);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
-    background-repeat:repeat; background-size:180px 180px; background-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.30'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:200px 200px; background-blend-mode:screen;
     min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:48px 20px; line-height:1.6;
+    padding:56px 20px; line-height:1.65; position:relative; overflow-x:hidden;
   }
-  .hero{text-align:center; max-width:760px; margin-bottom:40px}
-  .kicker{text-transform:uppercase; letter-spacing:.18em; font-size:13px; color:var(--accent); font-weight:700; margin-bottom:14px}
-  h1{font-family:var(--font-display); font-size:clamp(32px,6vw,52px); line-height:1.1; margin:0 0 16px;
-    background:linear-gradient(120deg,var(--hero1),var(--hero2)); -webkit-background-clip:text; background-clip:text; color:transparent}
-  .sub{font-size:18px; color:var(--muted); margin:0 auto; max-width:560px}
-  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; width:100%; max-width:760px}
+  /* ambient glow */
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+     radial-gradient(60% 50% at 18% 8%, rgba(224,145,90,.16), transparent 60%),
+     radial-gradient(55% 50% at 88% 96%, rgba(160,180,110,.14), transparent 60%);}
+  .hero,.cards,footer{position:relative; z-index:1}
+  .hero{text-align:center; max-width:780px; margin-bottom:46px}
+  .kicker{font-family:var(--font-ui); text-transform:uppercase; letter-spacing:.2em; font-size:12.5px;
+    color:var(--accent); font-weight:800; margin-bottom:18px; display:inline-flex; align-items:center; gap:12px}
+  .kicker::before,.kicker::after{content:""; width:34px; height:1px; background:currentColor; opacity:.5}
+  h1{font-family:var(--font-display); font-optical-sizing:auto; font-weight:600;
+    font-size:clamp(36px,7vw,62px); line-height:1.04; margin:0 0 18px; letter-spacing:-.015em; text-wrap:balance;
+    color:#F6ECDC;}
+  h1 .amp{color:var(--accent); font-style:italic}
+  .sub{font-size:19px; color:var(--muted); margin:0 auto; max-width:580px; text-wrap:pretty}
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:26px; width:100%; max-width:800px}
   .card{
-    display:block; text-decoration:none; color:inherit; background:var(--surface);
-    border:1px solid var(--line); border-radius:18px 18px 22px 22px; padding:30px 28px;
-    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 10px 28px -14px rgba(60,40,20,.45);
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    display:flex; flex-direction:column; text-decoration:none; color:inherit; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; padding:34px 30px 28px;
+    background-image:linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--surface) 90%,var(--bg2)));
+    box-shadow:var(--shadow); transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     position:relative; overflow:hidden;
   }
-  .card::before{content:""; position:absolute; top:0; left:0; right:0; height:5px;
-    background:linear-gradient(90deg,var(--accent),var(--accent2))}
-  .card:hover,.card:focus-visible{transform:translateY(-4px);
-    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 18px 40px -16px rgba(60,40,20,.55);
-    border-color:var(--accent); outline:none}
-  .card .ico{font-size:40px; display:block; margin-bottom:14px}
-  .card h2{font-family:var(--font-display); font-size:24px; margin:0 0 8px; color:var(--ink)}
-  .card p{margin:0 0 16px; color:var(--muted); font-size:15px}
-  .go{display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--accent); font-size:15px}
-  .go .arr{transition:transform .18s ease}
-  .card:hover .arr,.card:focus-visible .arr{transform:translateX(4px)}
-  footer{margin-top:42px; color:var(--muted); font-size:13px; text-align:center}
-  footer a{color:var(--accent)}
+  .card::before{content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent2)); opacity:.85}
+  .card:hover,.card:focus-visible{transform:translateY(-5px); border-color:color-mix(in srgb,var(--accent) 55%,var(--line));
+    box-shadow:0 22px 50px -18px rgba(0,0,0,.6); outline:none}
+  .card .ico{font-size:42px; line-height:1; margin-bottom:18px; display:grid; place-items:center;
+    width:64px; height:64px; border-radius:16px; background:var(--stage);
+    border:1px solid color-mix(in srgb,var(--stage) 50%,#000); box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+  .card h2{font-family:var(--font-display); font-size:26px; font-weight:600; margin:0 0 8px; color:#F6ECDC; letter-spacing:-.01em}
+  .card p{margin:0 0 22px; color:var(--muted); font-size:15.5px; flex:1}
+  .go{font-family:var(--font-ui); display:inline-flex; align-items:center; gap:8px; font-weight:700;
+    color:var(--accent); font-size:14.5px}
+  .go .arr{transition:transform .2s ease}
+  .card:hover .arr,.card:focus-visible .arr{transform:translateX(5px)}
+  footer{font-family:var(--font-ui); margin-top:48px; color:var(--muted); font-size:12.5px; text-align:center; letter-spacing:.2px}
+  footer a{color:var(--accent); text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important}
+    .card:hover{transform:none}
+  }
 </style>
 </head>
 <body>
   <div class="hero">
-    <div class="kicker">BBIT Learning Module</div>
-    <h1>Critical Thinking &amp; Druid Loops</h1>
-    <p class="sub">Two interactive, accessible study guides. Pick a module to begin — each one has Simple/Detailed modes, theme &amp; text-size controls, and a progress checklist.</p>
+    <div class="kicker">Black Belt in Thinking</div>
+    <h1>Critical Thinking <span class="amp">&amp;</span> Druid Loops</h1>
+    <p class="sub">Two interactive study guides. Each has a progress spine, Simple/Detailed depth, three themes, an easy-read font, and the real course diagrams — staged and built in.</p>
   </div>
   <div class="cards">
     <a class="card" href="critical-thinking.html">
       <span class="ico">🧠</span>
       <h2>Critical Thinking</h2>
-      <p>Cause &amp; effect, prerequisites, hidden assumptions, injections and tactics — the logic toolkit, step by step.</p>
+      <p>Cause &amp; effect, prerequisites, hidden assumptions, and a repeatable way to invent solutions — the logic toolkit, step by step.</p>
       <span class="go">Open module <span class="arr">→</span></span>
     </a>
     <a class="card" href="druid-loops.html">
@@ -68,6 +94,6 @@
       <span class="go">Open module <span class="arr">→</span></span>
     </a>
   </div>
-  <footer>Best viewed in a modern browser. Pages work offline — all images are built in.</footer>
+  <footer>Best viewed in a modern browser. Your progress &amp; settings are saved on your device.</footer>
 </body>
 </html>

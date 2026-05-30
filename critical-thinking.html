@@ -277,7 +277,7 @@ figure.diagram figcaption{margin-top:12px; font-family:var(--font-ui); font-size
   .section:hover,.backtop:hover,figure.diagram img:hover{transform:none}}
 </style>
 </head>
-<body data-module="critical-thinking-interactive" data-mode="simple">
+<body class="theme-dark" data-module="critical-thinking-interactive" data-mode="simple">
 <div id="progress"></div>
 <div class="toolbar">
   <div class="brand"><span class="dot"></span>BBIT · Critical Thinking</div>
@@ -358,7 +358,7 @@ function applyScale(s){document.documentElement.style.setProperty('--scale',s);
 
 let scale = store.get('scale',1);
 applyScale(scale);
-applyTheme(store.get('theme','cream'));
+applyTheme(store.get('theme','dark'));
 applyMode(store.get('mode','simple'));
 applyEasy(store.get('easy',false));
 
