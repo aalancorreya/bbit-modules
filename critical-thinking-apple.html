@@ -21,7 +21,7 @@
   --t-hero:clamp(42px,8vw,82px); --t1:clamp(28px,4.4vw,46px); --t2:clamp(26px,4vw,40px);
   --t3:clamp(20px,2.4vw,26px); --t4:clamp(17px,1.9vw,20px);
   --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-  --rail:268px; --readw:720px; --scale:1; --ease:cubic-bezier(.22,1,.36,1);
+  --rail:268px; --readw:880px; --shellmax:1480px; --scale:1; --ease:cubic-bezier(.22,1,.36,1);
   --nav-h:54px;
 }
 *{box-sizing:border-box}
@@ -91,7 +91,7 @@ h1,h2,h3{text-wrap:balance}
 .easy-toggle.active{background-image:var(--grad); color:#1a0e00; border-color:transparent}
 
 /* ---- shell: rail + stage ---- */
-.shell{display:grid; grid-template-columns:var(--rail) minmax(0,1fr)}
+.shell{display:grid; grid-template-columns:var(--rail) minmax(0,1fr); max-width:var(--shellmax); margin-inline:auto}
 .rail{position:sticky; top:var(--nav-h); align-self:start; height:calc(100vh - var(--nav-h));
   overflow:auto; overscroll-behavior:contain; border-right:1px solid var(--hair2); padding:22px 14px 40px}
 .rail-head{padding:0 8px 14px}
@@ -289,10 +289,10 @@ summary:focus-visible{outline:none; box-shadow:0 0 0 3px rgba(41,151,255,.6); bo
 @media(max-width:560px){ .ch-prev .nav-ttl,.ch-next .nav-ttl{font-size:13.5px} }
 
 /* ---- done / celebration ---- */
-.done{max-width:680px; margin:0 auto; padding:80px 22px 110px; text-align:center}
+.finish{max-width:680px; margin:0 auto; padding:80px 22px 110px; text-align:center}
 .done-badge{font-size:72px; line-height:1; margin-bottom:var(--s3); animation:pop .7s var(--ease) both}
 @keyframes pop{0%{transform:scale(.3); opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1); opacity:1}}
-.done h1{font-size:var(--t1); font-weight:700; letter-spacing:-.03em; margin:0 0 14px; color:#fff}
+.finish h1{font-size:var(--t1); font-weight:700; letter-spacing:-.03em; margin:0 0 14px; color:#fff}
 .done-sub{font-size:18px; color:var(--dim); margin:0 auto var(--s5); max-width:40ch; line-height:1.5}
 .recap{list-style:none; margin:0 auto var(--s5); padding:0; text-align:left; max-width:560px; counter-reset:rp; display:grid; gap:10px}
 .recap li{counter-increment:rp; display:flex; gap:14px; align-items:flex-start; padding:15px 18px; border-radius:16px;
@@ -550,7 +550,7 @@ body.focus .chapter{max-width:660px}
   </article>
 </section>
     <section class="view" id="view-done" data-view="done" hidden>
-      <div class="done">
+      <div class="finish">
         <div class="done-badge">🎉</div>
         <h1>You finished Critical Thinking.</h1>
         <p class="done-sub">Every chapter behind you. Here’s the whole thing in sixty seconds — a quick recall before you go.</p>
